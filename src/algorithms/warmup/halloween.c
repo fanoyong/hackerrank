@@ -4,15 +4,15 @@
 #include <stdlib.h>
 
 int main() {
-    int i;
-    int T,K;
-    scanf("%d", &T);
+    long i;
+    long T,K;
+    scanf("%ld", &T);
     for (i=0;i<T;i++) {
-        scanf("%d", &K);
+        scanf("%ld", &K);
         if (K%2 == 1) {
-            printf("%d\n", (K-1)/2 * ((K-1)/2 + 1));
+            printf("%ld\n", (K-1)/2 * ((K-1)/2 + 1));
         } else {
-            printf("%d\n", K*K/4);
+            printf("%ld\n", K*K/4);
         }
     }
     return 0;
