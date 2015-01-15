@@ -46,7 +46,7 @@ Artificial Intelligence
 ### Richman Games
 ### Statistics and Machine Learning
 ### Natural Language Processing
-### A* Search
+### A-star Search
 ### Combinatorial Search Theory
 ### Cellular Automaton Games
 ### Digital Image Analysis
