@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+//For test
 int main() {
     int V, n;
     int i,t;
