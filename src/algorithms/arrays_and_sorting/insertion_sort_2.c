@@ -5,6 +5,7 @@
 #include <assert.h>
 
 void printAr(int ar_size, int * ar) {
+
     int i;
     for(i=0; i<ar_size; i++) {
         printf("%d ",ar[i]);
