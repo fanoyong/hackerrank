@@ -4,7 +4,7 @@ hackerrank
 Algorithms
 ----------
 ### Warmup
-In-progress
+Done
 ### Search
 ### Strings
 ### Data structures
@@ -14,6 +14,7 @@ In-progress
 ### Probability
 ### Summations and Algebra
 ### Array and Sorting
+In progress
 ### Dynamic Programming
 ### Graph Theory
 ### Quiz
