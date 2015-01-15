@@ -17,7 +17,7 @@ void insertionSort(int ar_size, int *  ar) {
     for(j=1; j<ar_size; j++) {
         int V = ar[j];
         ar[ar_size-1] = ar[ar_size-2];
-        for(i=ar_size-1; i>0; i--) {
+        for(i=j; i<ar_size; i++) {
             //printf("i %d ar[i] %d V %d\n",i, ar[i-1], V);
             if(ar[i-1] < V) {
                 ar[i] = V;
