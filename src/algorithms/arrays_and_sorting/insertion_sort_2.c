@@ -27,6 +27,7 @@ void insertionSort(int ar_size, int *  ar) {
             ar[i] = ar[i-1];
         }
     }
+
 }
 
 int main(void) {
