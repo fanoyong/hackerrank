@@ -15,20 +15,19 @@ void printAr(int ar_size, int * ar) {
 
 void insertionSort(int ar_size, int *  ar) {
     int i,j;
-    for(j=1; j<ar_size; j++) {
-        int V = ar[j];
-        ar[ar_size-1] = ar[ar_size-2];
-        for(i=j; i<ar_size; i++) {
-            //printf("i %d ar[i] %d V %d\n",i, ar[i-1], V);
-            if(ar[i-1] < V) {
-                ar[i] = V;
-                printAr(ar_size, ar);
+    for(i=1; i<ar_size; i++) {
+        int V = ar[i];
+        for (j=i; j>0; j--) {
+            ar[j] = ar[j-1];
+            if( ar[j] < V) {
+                ar[j] = V;
                 break;
+            } else {
+                ar[j-1] = V;
             }
-            ar[i] = ar[i-1];
         }
+        printAr(ar_size, ar);
     }
-
 }
 
 int main(void) {
