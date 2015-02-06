@@ -27,7 +27,9 @@ The Linux Shell
 ---------------
 
 ### Bash Tutorials
+Done
 ### Intro to Text Processing Utilities
+In progress
 
 Miscellaneous
 -------------
