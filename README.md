@@ -29,12 +29,13 @@ The Linux Shell
 ### Bash Tutorials
 Done
 ### Intro to Text Processing Utilities
-In progress
+Done
 
 Miscellaneous
 -------------
 
 ### Regex
+In progress
 ### Linked Lists
 ### Esoteric Languages
 ### Python Tutorials
