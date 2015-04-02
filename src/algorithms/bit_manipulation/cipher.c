@@ -2,6 +2,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#define DEBUG 1
 
 int char_to_int(char);
 
@@ -16,9 +17,15 @@ int main() {
     answer[0] = 1;
     for (i=1; i<N+K-1; i++) {
         N2 = (i < K )? i : K;
-        local_answer = char_to_int(S[i]);
-        for (j=0; j<N2; j++) {
-            local_answer = local_answer ^ char_to_int(S[j]);
+#if DEBUG
+        printf("%d\n", N2);
+#endif
+        local_answer = char_to_int(S[i-1]);
+        for (j=i-1; j<N2; j++) {
+#if DEBUG
+            printf("j=%d char=%d\n", j, answer[j]);
+#endif
+            local_answer = local_answer ^ char_to_int(answer[j]);
         }
         answer[i] = local_answer;
     }
