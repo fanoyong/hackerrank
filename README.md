@@ -6,8 +6,11 @@ Algorithms
 ### Warmup
 Done
 ### Search
+In progress
 ### Strings
+In progress
 ### Data structures
+In progress
 ### Cryptography
 ### Bit Manipulation
 ### Game Theory
@@ -19,6 +22,7 @@ In progress
 ### Graph Theory
 ### Quiz
 ### Number Theory
+In Progress
 ### NP Complete problems
 ### Combinatorics
 ### Geometry
