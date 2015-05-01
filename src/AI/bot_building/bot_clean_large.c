@@ -3,7 +3,6 @@
 #define DEBUG 0
 
 int w,h;
-int max;
 
 int valid_x_y(int x, int y) {
     return (x>=0) && (x<h) && (y>=0) && (y<w);
@@ -13,10 +12,29 @@ int traverse(int depth, int max_depth, int i, int j, char board[50][50]) {
 #if DEBUG
     printf("traverse depth:%d i:%d j:%d\n", depth, i, j);
 #endif
-    if (depth > max_depth || depth > max || !valid_x_y(i,j)) {
+    if (depth > max_depth) {
+#if DEBUG
+        printf("Error 1\n");
+#endif
         return 0;
     }
+    if (depth > max_depth) {
+#if DEBUG
+        printf("Error 2\n");
+#endif
+        return 0;
+    } 
+    if (!valid_x_y(i,j)) {
+#if DEBUG
+        printf("Error 3\n");
+#endif
+        return 0;
+    }
+    
     if (board[i][j] == 'd') {
+#if DEBUG
+        printf("got it\n");
+#endif
         return 1;
     }
     if (traverse(depth+1, max_depth, i-1,j,board)) {
@@ -28,6 +46,9 @@ int traverse(int depth, int max_depth, int i, int j, char board[50][50]) {
     } else if (traverse(depth+1, max_depth, i, j-1, board)) {
         return 5;
     }
+#if DEBUG
+    printf("Found nothing\n");
+#endif
     return 0;
 }
 
@@ -38,7 +59,7 @@ void next_move(int posr, int posc, char board[50][50]) {
         printf("CLEAN\n");
         return;
     }
-    for (i=1; i<=max; i++) {
+    for (i=1; i<=w+h; i++) {
         ret = traverse(1, i+1, posr, posc, board);
         switch (ret) {
             case 2:
@@ -69,7 +90,6 @@ int main(void) {
     }
     h = dim[0];
     w = dim[1];
-    max = dim[0] + dim[1];
     next_move(pos[0], pos[1], board);
     return 0;
 }
