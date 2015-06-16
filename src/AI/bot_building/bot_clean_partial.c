@@ -104,65 +104,231 @@ void find_target(coordinate * current, coordinate * destination){
 }
 
 void print_path(coordinate * current, coordinate * destination){
-    int direction, zone;
+    FILE *fp;
+    int direction, direction_prev;
+
+    //printf("current %d/%d destination %d/%d\n", current->x, current->y, destination->x, destination->y);
+
+    fp = fopen("previous_move", "r");
+    direction_prev = -1;
+    if (NULL != fp) {
+        fscanf(fp, "%d", &direction_prev);
+        fclose(fp);
+    }
+
     if(valid_x_y(destination->x, destination->y) && valid_x_y(current->x, current->y)) {
         if(destination->x < current->x) {
+            fp = fopen("previous_move", "w");
+            fprintf(fp, "0");
+            fclose(fp);
             printf("UP\n");
         } else if (destination->x > current->x) {
+            fp = fopen("previous_move", "w");
+            fprintf(fp, "1");
+            fclose(fp);
             printf("DOWN\n");
         } else {
             if(destination->y > current->y) {
+            fp = fopen("previous_move", "w");
+                fprintf(fp, "2");
+                fclose(fp);
                 printf("RIGHT\n");
             } else if (destination->y < current->y) {
+                fp = fopen("previous_move", "w");
+                fprintf(fp, "3");
+                fclose(fp);
                 printf("LEFT\n");
             } else {
                 printf("CLEAN\n");
             }
         }
     } else {
-        direction = rand() % 2;
-        if (current->x <= (h/2)) {
-            if(current->y <= (w/2)) {
-                zone = 0;
-            } else {
-                zone = 1;
+        /* In here apply some smart algorithm. 
+         * It will just use previous step's path with 90% of probability
+         * Or it will pick any ramdom direction with 10% of probability
+         */
+        if (direction_prev < 0) {
+            direction = rand() % 4;
+            switch (direction) {
+                case 0:
+                    if (current->x > 1) {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "0");
+                        fclose(fp);
+                        printf("UP\n");
+                    } else {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "1");
+                        fclose(fp);
+                        printf("DOWN\n");
+                    }
+                    break;
+                case 1:
+                    if (current->x < h-1) {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "1");
+                        fclose(fp);
+                        printf("DOWN\n");
+                    } else {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "0");
+                        fclose(fp);
+                        printf("UP\n");
+                    }
+                    break;
+                case 2:
+                    if (current->y < w-1) {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "2");
+                        fclose(fp);
+                        printf("RIGHT\n");
+                    } else {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "3");
+                        fclose(fp);
+                        printf("LEFT\n");
+                    }
+                    break;
+                case 3:
+                    if (current->y > 0) {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "3");
+                        fclose(fp);
+                        printf("LEFT\n");
+                    } else {
+                        fp = fopen("previous_move", "w");
+                        fprintf(fp, "2");
+                        fclose(fp);
+                        printf("RIGHT\n");
+                    }
+                    break;
             }
         } else {
-            if(current->y <= (w/2)) {
-                zone = 3;
-            } else {
-                zone = 2;
-            }
-        }
-        switch(zone) {
-            case 0:
-                if(direction) {
-                    printf("DOWN\n");
-                } else {
-                    printf("RIGHT\n");
-                }
-                break;
-            case 1:
-                if(direction) {
-                    printf("DOWN\n");
-                } else {
-                    printf("LEFT\n");
-                }
-                break;
-            case 2:
-                if(direction) {
-                    printf("UP\n");
-                } else {
-                    printf("LEFT\n");
-                }
-                break;
-            case 3:
-                if(direction) {
-                    printf("UP\n");
-                } else {
-                    printf("RIGHT\n");
-                }
-                break;
+            direction = rand() % 10;
+            //printf("direction = %d\n", direction);
+            switch (direction) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    direction_prev = rand() % 4;
+                    switch(direction_prev) {
+                        case 0:
+                            if (current->x > 1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "0");
+                                fclose(fp);
+                                printf("UP\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "1");
+                                fclose(fp);
+                                printf("DOWN\n");
+                            }
+                            break;
+                        case 1:
+                            if (current->x < h-1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "1");
+                                fclose(fp);
+                                printf("DOWN\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "0");
+                                fclose(fp);
+                                printf("UP\n");
+                            }
+                            break;
+                        case 2:
+                            if (current->y < w-1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "2");
+                                fclose(fp);
+                                printf("RIGHT\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "3");
+                                fclose(fp);
+                                printf("LEFT\n");
+                            }
+                            break;
+                        case 3:
+                        default:
+                            if (current->y > 0) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "3");
+                                fclose(fp);
+                                printf("LEFT\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "2");
+                                fclose(fp);
+                                printf("RIGHT\n");
+                            }
+                            break;
+                    }
+                    break;
+                default:
+                    //printf("previous direction %d\n", direction_prev);
+                    switch (direction_prev) {
+                        case 0:
+                            if (current->x > 1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "0");
+                                fclose(fp);
+                                printf("UP\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "1");
+                                fclose(fp);
+                                printf("DOWN\n");
+                            }
+                            break;
+                        case 1:
+                            if (current->x < h-1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "1");
+                                fclose(fp);
+                                printf("DOWN\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "0");
+                                fclose(fp);
+                                printf("UP\n");
+                            }
+                            break;
+                        case 2:
+                            if (current->y < w-1) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "2");
+                                fclose(fp);
+                                printf("RIGHT\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "3");
+                                fclose(fp);
+                                printf("LEFT\n");
+                            }
+                            break;
+                        case 3:
+                            if (current->y > 0) {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "3");
+                                fclose(fp);
+                                printf("LEFT\n");
+                            } else {
+                                fp = fopen("previous_move", "w");
+                                fprintf(fp, "2");
+                                fclose(fp);
+                                printf("RIGHT\n");
+                            }
+                            break;
+                    }
+                    break;    
+             }
         }
     }
 }
