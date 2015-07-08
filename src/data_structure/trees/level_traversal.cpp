@@ -9,17 +9,17 @@ struct node
 
 void LevelOrder(node * root)
 {
-    int count = 0;
+    int head = 0, tail = 0;
     struct node *nodes[10000];
-    nodes[count++] = root;
-    while(count > 0) {
-        node *n = nodes[--count];
+    nodes[tail++] = root;
+    while(head != tail) {
+        node *n = nodes[head++];
         cout << n->data << " ";
         if (n->left != NULL) {
-            nodes[count++] = n->left;
+            nodes[tail++] = n->left;
         }
         if (n->right != NULL) {
-            nodes[count++] = n->right;
+            nodes[tail++] = n->right;
         }
     }
 }
