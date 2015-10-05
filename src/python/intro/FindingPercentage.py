@@ -1,11 +1,13 @@
+from __future__ import division
+data = {}
 n = int(raw_input())
 for i in range(0,n):
     line = raw_input().split()
     name = line[0]
-    a = int(line[1])
-    b = int(line[2])
-    c = int(line[3])
-    data[name] = (a+b+c) / 3
+    sum = float(line[1]) + float(line[2]) + float(line[3])
+    data[name] = sum
 
-answer = raw_input()
-print data[answer]
+pick = raw_input()
+    
+answer = "%.2f" % round(data[pick]/3, 2)
+print answer
