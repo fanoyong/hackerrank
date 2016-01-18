@@ -5,7 +5,8 @@
 #include <algorithm>
 using namespace std;
 
-unsigned long long get_largest_prime_factor(unsigned long long N);
+void get_largest_prime_factor(unsigned long long N);
+unsigned long long MAX_PF = 0;
 
 int main() {
     int T;
@@ -14,34 +15,30 @@ int main() {
     while(T--)
     {
         cin >> N;
-        cout << get_largest_prime_factor(N) << endl;
+        get_largest_prime_factor(N);
+        cout << MAX_PF << endl;
     }
     return 0;
 }
 
-unsigned long long get_largest_prime_factor(unsigned long long N)
+void get_largest_prime_factor(unsigned long long N)
 {
-    unsigned long long i, P=-1, Q=-1;
+    unsigned long long i, P=0, Q=0;
     for(i=2; i<=(unsigned long long)N/(i-1); i++)
     {
         if (N%i == 0)
         {
             P = i;
             Q = N/i;
-            if (Q > P)
-            {
-                return get_largest_prime_factor(N/P);
-            }
-            else
-            {
-                return get_largest_prime_factor(N/Q);
-            }
-            
+            return get_largest_prime_factor(Q);
         }
     }
-    if (P<0 || P>N)
+    if (P<=0 || P>=N)
     {
         P = N;
+        if (P > MAX_PF)
+        {
+            MAX_PF = P;
+        }
     }
-    return P;
 }
