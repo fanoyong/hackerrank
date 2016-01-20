@@ -7,6 +7,7 @@ using namespace std;
 
 int bruteforce(int N);
 int betterway(int N);
+int muchbetterway(int N);
 
 int main() {
     int T, N;
@@ -16,7 +17,8 @@ int main() {
     {
         cin >> N;
         // cout << bruteforce(N) << endl;
-        cout << betterway(N) << endl;
+        // cout << betterway(N) << endl;
+        cout << muchbetterway(N) << endl;
     }
     return 0;
 }
@@ -48,29 +50,50 @@ int bruteforce(int N)
     return max;
 }
 
-int betterwary(int N)
+int betterway(int N)
 {
-    int i, local_max, c1, c2, max = -1;
-    // 1) find max(abc) give a + b + c = N and a^2 + b^2 - c^2 = 0
-    // 2) From 1), we know that a+b = N - c
-    // 3) From 2) & 1) (a+b)^2 = a^2 + b^2 + 2ab = N^2 + c^2 - 2Nc. It gives
-    // 4) 2ab = N^2 + c^2 - 2Nc - a^2 - b^2
-    // 5) From 1), We know that c^2 - a^2 - b^ 2 which gives 4) that 2ab = N^2 - 2Nc
-    // 6) From 5) abc becomes c * (N^2 - 2Nc) * 0.5
-    // Thus abc = 0.5 * c * N^2 - Nc^2
-    c1 = 0.5 * pow(N,2);
-    c2 = -1 * N;
-    for (i = 3; i<= N-2; i++)
-    {
-        local_max = c1 * i + c2 * i * i;
+    int i, j, k, ap, bp, cp;
+    int max = -1, local_max;
+    // c = N - a - b
+    for(i=1; i<N-2; i++) {
+        ap = i*i;
+        for(j=i+1; j<N-1; j++) {
+            bp = j*j;
+            k = N - i - j;
+            cp = k*k;
+            if(ap + bp == cp)
+            {
+                local_max = i*j*k;
+                if (local_max > max)
+                {
+                    max = local_max;
+                }
+            }
+        }
+    }
+    return max;
+}
+
+int muchbetterway(int N)
+{
+    // c = N - a - b
+    // c^2 = a^2 + b^2
+    // c^2 = N^2 + a^2 + b^2 +2ab - 2(Na+ Nb) = a^2 + b^2
+    // N^2 +2ab -2Na -2Nb = 0;
+    // b = 2Na - N^2 / 2* (a-N)
+    int max=-1, local_max;
+    int i, j, k, ap, bp , cp;
+    for(i=1; i<N-2; i++) {
+        j = (2*N*i - N*N / (2*(i-N)));
+        k = N - i - j;
+        ap = i*i;
+        bp = j*j;
+        cp = k*k;
+        local_max = i*j*k;
         if (local_max > max)
         {
             max = local_max;
         }
-    }
-    if (max <= 0)
-    {
-        max = -1;
     }
     return max;
 }
