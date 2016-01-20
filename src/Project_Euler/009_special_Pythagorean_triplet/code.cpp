@@ -5,9 +5,9 @@
 #include <algorithm>
 using namespace std;
 
-int bruteforce(int N);
-int betterway(int N);
-int muchbetterway(int N);
+int bruteforce(int N); // O(N^3)
+int betterway(int N); // O(N^2)
+long long muchbetterway(int N); // O(N)
 
 int main() {
     int T, N;
@@ -61,7 +61,7 @@ int betterway(int N)
             bp = j*j;
             k = N - i - j;
             cp = k*k;
-            if(ap + bp == cp)
+            if(ap + bp == cp && i+j > k)
             {
                 local_max = i*j*k;
                 if (local_max > max)
@@ -74,25 +74,30 @@ int betterway(int N)
     return max;
 }
 
-int muchbetterway(int N)
+long long muchbetterway(int N)
 {
-    // c = N - a - b
+    // c = N - (a + b)
     // c^2 = a^2 + b^2
-    // c^2 = N^2 + a^2 + b^2 +2ab - 2(Na+ Nb) = a^2 + b^2
-    // N^2 +2ab -2Na -2Nb = 0;
-    // b = 2Na - N^2 / 2* (a-N)
-    int max=-1, local_max;
-    int i, j, k, ap, bp , cp;
+    // c^2 = N^2 + (a+b)^2 - 2N(a+b) = a^2 + b^2 + 2ab -2Na -2Nb + N^2 = a^2 + b^2
+    // 2ab -2Na -2Nb + N^2 = 0 -> (2a -2N) b = (2N - N^2) 
+    // b = (2Na-N^2) / (2a - 2N)
+    long long max=-1, local_max;
+    long long i, j, k, ap, bp , cp;
     for(i=1; i<N-2; i++) {
-        j = (2*N*i - N*N / (2*(i-N)));
+        j = (2*N*i - N*N) / (2*i - 2*N);
         k = N - i - j;
+        if (i<=0 || j <=0 || k <=0) {
+            continue;
+        }
         ap = i*i;
         bp = j*j;
         cp = k*k;
-        local_max = i*j*k;
-        if (local_max > max)
-        {
-            max = local_max;
+        if(cp - ap - bp == 0 && i+j>k) {
+            local_max = i*j*k;
+            if (local_max > max) {
+                // cout << i << "/" << j << "/" << k << endl;
+                max = local_max;
+            }
         }
     }
     return max;
