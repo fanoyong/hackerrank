@@ -11,24 +11,22 @@ using namespace std;
 
 void generate_100_primes();
 void generate_minimal_HCN();
+long long get_prod_sum(long long N);
 long long get_answer(long long N);
-void init_data();
-void print_data();
 
-long long PRIME[100];
-long long DATA[100];
-long long NOMINAL[100];
-long long QUOTIENT[100];
+long long PRIME[5000];
+long long DATA[1000];
+long long ANSWER[1000];
 
 int main() {
     long long i, T, N;
     generate_100_primes();
     generate_minimal_HCN();
-    print_data();
     cin >> T;
     while (T--) {
         cin >> N;
         i = get_answer(N);
+        cout << ANSWER[i] << endl;
     }
     return 0;
 }
@@ -49,62 +47,60 @@ void generate_100_primes()
         if(flag) {
             PRIME[cnt++] = i;
         }
-        if(cnt == 100) return;
+        if(cnt == 5000) return;
     }
 }
 
 void generate_minimal_HCN()
 {
-    long long i, j, prod, prod_sum, min, min_i;
+    int prod = 1;
+    long long i, j, number, sum;
     DATA[0] = 1;
-    for(i=1; i<100; i++) {
-        init_data();
-        prod = 1;
-        prod_sum = 0;
-        min = INT_MAX;
-        while(prod_sum < (i+1)) {
-
-            for(j=0;j<100;j++) {
-                if(NOMINAL[j] < min) {
-                    min = NOMINAL[j];
-                    min_i = j;
-                }
-            }
-
-            NOMINAL[min_i] = NOMINAL[min_i] * PRIME[min_i];
-            QUOTIENT[min_i]++;
-
-            for(j=0;j<100;j++) {
-                if(QUOTIENT[j] != 0 && NOMINAL[j] > 1) {
-                    prod = prod * QUOTIENT[j] * NOMINAL[j];
-                    prod_sum = prod_sum + (QUOTIENT[j]+1);
-                }
+    i = 1;
+    while(1) {
+        for(;;i++) {
+            number = (int) (i * (i+1) / 2);
+            sum = get_prod_sum(number);
+            if(DATA[prod-1] < sum) {
+                DATA[prod] = sum;
+                ANSWER[prod] = number;
+                break;
             }
         }
-        DATA[i] = prod;
+        // cout << "i=" << i << " n=" << number << " DATA[prod]=" << DATA[prod] << endl;
+        if(DATA[prod] > 1000) {
+            break;
+        }
+        prod++;
     }
+}
+
+long long get_prod_sum(long long N)
+{
+    int i, prod;
+    int sum = 1;
+    for(i=0; i< 5000;i++) {
+        if (PRIME[i] > N) {
+            break;
+        }
+        prod = 1;
+        while(N%PRIME[i] == 0) {
+            prod++;
+            N /= PRIME[i];
+        }
+        sum *= prod;
+    }
+    return sum;
 }
 
 long long get_answer(long long N)
 {
-    return 0;
-}
-
-void init_data()
-{
     int i;
-    for(i=0; i<100;i++) {
-        NOMINAL[i] = PRIME[i];
-        QUOTIENT[i] = 0;
+    for(i=0;;i++) {
+        if(DATA[i] > N) {
+            break;
+        }
     }
+    return i;
 }
-
-void print_data()
-{
-    int i;
-    for(i=0;i<100;i++) {
-        cout << DATA[i] << endl;
-    }
-}
-
 
