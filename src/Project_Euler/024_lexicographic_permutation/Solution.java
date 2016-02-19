@@ -52,19 +52,21 @@ public class Solution {
             }
             System.out.println("k=" + k);
             l = ca.length - 1;
-            for (int i = ca.length - 1; i > 0; i--) {
+            for (int i = ca.length - 1; i > k; i--) {
                 if (ca[i] > ca[k]) {
                     l = i;
                     break;
                 }
             }
             System.out.println("l=" + l);
+            System.out.println("Swap " + ca[k] + " and " + ca[l]);
             c = ca[k];
             ca[k] = ca[l];
             ca[l] = c;
-            int start = k;
+            int start = k + 1;
             int last = ca.length - 1;
-            while (start < last) {
+            while (start <= last) {
+                System.out.println("Swap " + ca[start] + " and " + ca[last]);
                 c = ca[start];
                 ca[start] = ca[last];
                 ca[last] = c;
