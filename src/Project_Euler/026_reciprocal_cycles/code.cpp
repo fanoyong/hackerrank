@@ -14,10 +14,11 @@ int LIST[10001];
 int main()
 {
     int T, N;
+    generate_data(10000);
     cin >> T;
     while (T--) {
         cin >> N;
-        cout << generate_data(N) << endl;
+        cout << get_answer(N) << endl;
     }
     return 0;
 }
@@ -26,7 +27,7 @@ int get_answer(int N)
 {
     int MAX = -1;
     int index = 1;
-    for (int i = 3; i <= N; i++) {
+    for (int i = 3; i < N; i++) {
         if (DATA[i] > MAX) {
             MAX = DATA[i];
             index = i;
@@ -38,12 +39,12 @@ int get_answer(int N)
 int is_prime(int N)
 {
     int i;
-    if(i%2 == 0) return 1;
-    if(i%3 == 0) return 1;
-    for (i=5;i<=sqrt(N);i+=2) {
-        if(N%i == 0)  return 1;
+    if(N%2 == 0) return 1;
+    if(N%3 == 0) return 1;
+    for (i=3;i<=sqrt(N);i+=2) {
+        if(N%i == 0)  return 0;
     }
-    return 0;
+    return 1;
 }
 
 
@@ -57,6 +58,11 @@ int generate_data(int N)
         flag = 0;
         count = 0;
         if (i % 5 == 0 || i % 2 == 0) {
+            DATA[i] = 0;
+            continue;
+        }
+        if (i > 5 && !is_prime(i)) {
+            // cout << i << " is prime." << endl;
             DATA[i] = 0;
             continue;
         }
