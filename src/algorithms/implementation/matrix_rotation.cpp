@@ -9,7 +9,7 @@ using namespace std;
 #define DEBUG 0
 
 ULL DATA[301][301];
-int M,N,MIN_V;
+ULL M,N,MIN_V;
 
 void print_matrix();
 void rotate(ULL R);
@@ -43,8 +43,9 @@ void print_matrix()
     #if DEBUG
         cout << "print" << endl;
     #endif
-    for(int i=0; i<M; i++) {
-        for(int j=0; j<N; j++) {
+    ULL i, j;
+    for(i=0; i<M; i++) {
+        for(j=0; j<N; j++) {
             cout << DATA[i][j] << " ";
         }
         cout << endl;
@@ -53,11 +54,11 @@ void print_matrix()
 
 void rotate(ULL R)
 {
-    int i, j, shell, max_rotate;
+    ULL i, j, shell, max_rotate;
     ULL rotate;
     ULL cur, next, temp, last;
     for(shell=0; shell<MIN_V/2; shell++) {
-        max_rotate = (M+N) * 2 - shell * 8;
+        max_rotate = (M+N) * 2 - 4 - 8*shell;
         rotate = R % max_rotate;
         #if DEBUG
             cout << "shell=" << shell << " r=" << rotate << " max_r=" << max_rotate << endl;
@@ -68,7 +69,7 @@ void rotate(ULL R)
             #if DEBUG
                 cout << "left cur=" << cur << endl;
             #endif
-            for(int i=shell;i<M-shell-1; i++) {
+            for(i=shell;i<M-shell-1; i++) {
                 next = DATA[i+1][shell];
                 DATA[i+1][shell] = cur;
                 cur = next;
@@ -77,7 +78,7 @@ void rotate(ULL R)
                 print_matrix();
                 cout << "bottom cur=" << cur << endl;
             #endif
-            for(int j=shell;j<N-shell-1; j++) {
+            for(j=shell;j<N-shell-1; j++) {
                 next = DATA[M-shell-1][j+1];
                 DATA[M-shell-1][j+1] = cur;
                 cur = next;
@@ -86,7 +87,7 @@ void rotate(ULL R)
                 print_matrix();
                 cout << "right cur=" << cur << endl;
             #endif
-            for(int i=M-shell-1;i>shell; i--) {
+            for(i=M-shell-1;i>shell; i--) {
                 next = DATA[i-1][N-shell-1];
                 DATA[i-1][N-shell-1] = cur;
                 cur = next;
@@ -95,7 +96,7 @@ void rotate(ULL R)
                 print_matrix();
                 cout << "top cur=" << cur << endl;
             #endif
-            for(int j=N-shell-1;j>shell; j--) {
+            for(j=N-shell-1;j>shell; j--) {
                 next = DATA[shell][j-1];
                 DATA[shell][j-1] = cur;
                 cur = next;
