@@ -6,7 +6,7 @@
 using namespace std;
 
 #define LL long long
-#define DEBUG 1
+#define DEBUG 0
 /*
 1001010   
  1001010  
@@ -22,8 +22,6 @@ using namespace std;
 1 => c 1 s 1 => 0 => s-A[5-4] => s=1
 0 => c 0 s 1 => 1 => s=0 => S[6-4] => s=0
 0 => c 0 s 0 -> 0
-
-
 
 A[0] = S[0]
 A[1] = S[1] ^ A[0] = S[1] ^ S[0]
@@ -111,6 +109,9 @@ char * decode_better(char * input, LL N, LL K)
             cout << "B:" << (C^S) << endl;
         #endif
         A[start++] = (C^S) + '0';
+        if ((C^S)) {
+            S = 0;
+        }
         if (start >= K && (A[start-K] - '0') > 0) {
             #if DEBUG
                 cout << "flip S" << endl;
