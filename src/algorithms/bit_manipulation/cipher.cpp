@@ -6,42 +6,21 @@
 using namespace std;
 
 #define LL long long
-#define DEBUG 0
+#define DEBUG 1
 /*
 1001010   
  1001010  
   1001010 
    1001010
-    
+----------
 1110100110 (7,4,10)
 
-1 => 1 => s=1
-1 => c 1 s 1 => 0
-1 => c 1 s 1 => 0
-0 => c 0 s 1 => 1 => s=0 -> A[4-4] => s=1
-1 => c 1 s 1 => 0 => s-A[5-4] => s=1
-0 => c 0 s 1 => 1 => s=0 => S[6-4] => s=0
-0 => c 0 s 0 -> 0
-
-A[0] = S[0]
-A[1] = S[1] ^ A[0] = S[1] ^ S[0]
-A[2] = S[2] ^ A[1] ^ A[0] = S[2] ^ S[1] ^ S[0] ^ S[0]  =  S[2] ^ S[1]
-A[3] = S[3] ^ A[2] ^ A[1] ^ A[0] = S[3] ^ S[2] ^ S[1] ^ S[0] ^ S[0] ^ S[1] ^ S[0] ^ S[0] = S[3] ^ S[2]
-A[4] = S[4] ^ A[3] ^ A[2] ^ A[1] = S[4] ^ S[3] ^ S[2] ^ S[1] ^ S[0] ^ S[0] ^ S[1] ^ S[0] ^ S[0] S[2] ^ S[1] ^ S[0] ^ S[0] ^ S[1] ^ S[0] = S[4] ^ S[3]  ^ S[0]
-A[5] = S[5] ^ A[4] ^ A[3] ^ A[2] = S[5] ^ S[4] ^ S[0] ^ S[1]
-
-101
- 101
-  101
-   101
-    101
-
-1100011 (3,5,7)
-
-10111
- 10111
-  10111
-1100101
+1:1 s=1
+1: c 1 s 1 => 0
+1: c 1 s 1 => 0
+0: c 0 s 1 => 1 => s=0 a 1 => s=1
+1: c 1 s 1 => 0 => s=1 a 0 => s=1
+0: c 0 s 1 => 1 => s=1 a 0 => s=1
 
 */
 
@@ -106,20 +85,21 @@ char * decode_better(char * input, LL N, LL K)
         C = input[start] - '0';
         #if DEBUG
             cout << "start:" << start << "C:" << C << " S:" << S << " C^S:" << (C^S) << endl;
-            cout << "B:" << (C^S) << endl;
         #endif
         A[start++] = (C^S) + '0';
         if ((C^S)) {
             S = 0;
         }
-        if (start >= K && (A[start-K] - '0') > 0) {
+        if (start-1 >= K-1) {
             #if DEBUG
-                cout << "flip S" << endl;
+                cout << "start:" << (start-1) << " A[start-(K-1)]:" << A[start-K-1] << endl;
             #endif
-            if (S) {
-                S = 0;
-            } else {
-                S = 1;
+            if ((A[start-K-1] - '0') > 0) {
+                if (S) {
+                    S = 0;
+                } else {
+                    S = 1;
+                }
             }
         }
     }
