@@ -6,8 +6,10 @@
 using namespace std;
 
 #define LL long long
-#define DEBUG 1
+#define DEBUG 0
 /*
+
+7 4 1110100110
 1001010   
  1001010  
   1001010 
@@ -18,9 +20,32 @@ using namespace std;
 1:1 s=1
 1: c 1 s 1 => 0
 1: c 1 s 1 => 0
-0: c 0 s 1 => 1 => s=0 a 1 => s=1
-1: c 1 s 1 => 0 => s=1 a 0 => s=1
-0: c 0 s 1 => 1 => s=1 a 0 => s=1
+0: c 0 s 1 => 1 => s=0 a 1 => s 1
+1: c 1 s 1 => 0 => s=1 a 0 => s 1
+0: c 0 s 1 => 1 => s=0 a 0 => s 0
+0: c 0 s 0 => 0 => end
+
+
+6 2
+1110001
+
+101111
+ 101111
+-------
+1110001
+
+
+1:1 s=1
+1: c 1 s 1 => 0 => s 1 a 1 => s=0
+1: c 1 s 0 => 1 => s 1 a 0 => s=1
+0: c 0 s 1 => 1 => s 0 a 1 => s=1
+0: c 0 s 1 => 1 => s 0 a 1 => s=1
+0
+
+
+
+6 2
+1110001
 
 */
 
@@ -86,22 +111,26 @@ char * decode_better(char * input, LL N, LL K)
         #if DEBUG
             cout << "start:" << start << "C:" << C << " S:" << S << " C^S:" << (C^S) << endl;
         #endif
-        A[start++] = (C^S) + '0';
-        if ((C^S)) {
-            S = 0;
-        }
-        if (start-1 >= K-1) {
+        int next = (C^S);
+        A[start] = next + '0';
+        if (next) {
             #if DEBUG
-                cout << "start:" << (start-1) << " A[start-(K-1)]:" << A[start-K-1] << endl;
+                cout << "S updated to 1"  << endl;
             #endif
-            if ((A[start-K-1] - '0') > 0) {
-                if (S) {
-                    S = 0;
-                } else {
-                    S = 1;
-                }
+            if (S) {
+                S = 0;
+            } else {
+                S = 1;
             }
         }
+        if (start >= K-1) {
+            int old = A[start-K+1] - '0';
+            #if DEBUG
+                cout << "start:" << (start) << " A[start-(K-1)]:" << old << endl;
+            #endif
+            S = (S^old);
+        }
+        start++;
     }
     A[N-1] = input[N+K-2];
     A[N] = '\0';
