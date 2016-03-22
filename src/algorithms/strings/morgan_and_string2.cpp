@@ -9,9 +9,7 @@
 using namespace std;
 
 #define LL long long
-#define DEBUG 1
-
-const LL LIMIT = 100001;
+#define DEBUG 0
 
 void print (string a, LL i, string b, LL j, string c);
 
@@ -24,6 +22,8 @@ int main() {
     while (T--) {
         //char a[LIMIT], b[LIMIT], c[LIMIT];
         cin >> a >> b;
+        a.push_back('[');
+        b.push_back('[');
         const LL len_a = a.length() - 1;
         const LL len_b = b.length() - 1;
         char ca = '\0';
@@ -72,34 +72,53 @@ int main() {
                 c.push_back(cb);
                 j++;
             } else {
-                string ar = a.substr(i,len_a-i+1);
-                string br = b.substr(j,len_b-j+1);
+                LL i2 = i;
+                LL j2 = j;
+                char ca2 = a.at(i2);
+                char cb2 = b.at(j2);
                 #if DEBUG
-                   cout << "ar:" << ar << " br:" << br << endl;
+                    cout << "Case 3 ca2:" << ca2 << "/cb2:" << cb2 << endl;
                 #endif
-                int cp = ar.compare(br);
-                if (cp < 0) {
+                int flag = 1;
+                while (ca2 == cb2) {
+                    i2++;
+                    j2++;
+                    if (i2 > len_a) {
+                        flag <<= 1;
+                    }
+                    if (j2 > len_b) {
+                        flag <<= 1;
+                    }
+                    if (flag > 1) {
+                        break;
+                    }                    
+                    ca2 = a.at(i2);
+                    cb2 = b.at(j2);
                     #if DEBUG
-                        cout << "Case 3" << endl;
+                        cout << "i2:" << i2 << " j2:" << j2  << " ca2:" << ca2 << " cb2:" << cb2 << endl;
                     #endif
-                    c.push_back(ca);
-                    i++;
-                } else if (cp > 0) {
+                }
+                if (flag != 4) {
+                    if (ca2 < cb2) {
                     #if DEBUG
-                        cout << "Case 4" << endl;
+                        cout << "c before:" << c << endl;
                     #endif
-                    c.push_back(cb);
-                    j++;
+                        c += a.substr(i, (i2-i));
+                    #if DEBUG
+                        cout << "c after:" << c << endl;
+                    #endif
+                        i = i2;
+                    } else {
+                        c += b.substr(j, (j2-j));
+                        j = j2;
+                    }
                 } else {
-                    #if DEBUG
-                        cout << "Case 5" << endl;
-                    #endif
                     c.push_back(cb);
                     j++;
                 }
             }
         }
-        cout << c << endl;
+        cout << c.substr(0, len_a+len_b) << endl;
     }
     return 0;
 }
