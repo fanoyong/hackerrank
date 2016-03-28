@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-#define DEBUG 1
+#define DEBUG 0
 
 int main() {
     int N, T;
@@ -22,20 +22,39 @@ int main() {
         }
         cout << endl;
 #endif
-        if (N > 5) {
-            for(int i=0; i<N-2; i++) {
-                for(int j=i; j<N-2;j++){
-                    if (data[i] > data[j]) {
-                        int temp = data[j];
-                        data[j] = data[i];
-                        data[i] = temp;
-                    }
+        for(int i=0; i<N-4; i++) {
+            for(int j=i; j<N-4;j++){
+                if (data[i] > data[j]) {
+                    int temp = data[j];
+                    data[j] = data[i];
+                    data[i] = temp;
                 }
             }
-        } else {
-            
         }
-
+        if (N > 3) {
+            if (data[N-2] < data[N-3] && data[N-2] < data[N-4]) {
+#if DEBUG
+        cout << "case 1" << endl;
+#endif
+                int temp = data[N-4];
+                data[N-4] = data[N-2];
+                data[N-2] = data[N-3];
+                data[N-3] = temp;
+            } else if (data[N-3] < data[N-2] && data[N-3] < data[N-4]) {
+#if DEBUG
+        cout << "case 2" << endl;
+#endif
+                int temp = data[N-4];
+                data[N-4] = data[N-3];
+                data[N-3] = data[N-2];
+                data[N-2] = temp;
+            } else if (data[N-4] < data[N-2] && data[N-4] < data[N-3]) {
+#if DEBUG
+        cout << "case 3" << endl;
+#endif
+                // do nothing
+            }
+        }
 #if DEBUG
         cout << endl;
         for(int i = 0; i<N; i++) {
