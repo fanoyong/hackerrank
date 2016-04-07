@@ -5,59 +5,40 @@
 #include <algorithm>
 using namespace std;
 
-#define UNDEFINED -1
 #define DEBUG 1
 
-int top_down(int * C, int * D, int N, int M);
 int bottom_up(int * C, int N, int M);
 
 int main() {
     int N, M;
-    int C[50];
-    int D[251];
+    int C[51];
     int count = 0;
     cin >> N >> M;
-    for (int i = 0; i<=250; i++) {
-        D[i] = UNDEFINED;
-    }
-    for (int i = 0; i<M; i++) {
+    for (int i=1; i<=M; i++) {
         cin >> C[i];
     }
-    cout << top_down(C, D, N, M) << endl;
-    #if DEBUG
-        for(int i=1;i<=N;i++) {
-            cout << "D[" << i << "]:" << D[i] << " ";
-        }
-        cout << endl;
-    #endif
+    int answer = bottom_up(C, N, M);
+    cout << answer << endl;
     return 0;
 }
 
-int top_down(int * C, int * D, int N, int M)
-{
-    if (N < 0) {
-        #if DEBUG
-            cout << "N:" << N << " M:" << M <<  " return 0" << endl;
-        #endif
-        return 0;
+int bottom_up(int * C, int N, int M) {
+    int table[N+1][M];
+    // Fill the enteries for 0 value case (n = 0)
+    for (int i=0; i<M; i++) {
+        table[0][i] = 1;
     }
-    if (N == 0) {
-        #if DEBUG
-            cout << "N:" << N << " M:" << M <<  " return 1" << endl;
-        #endif
-        return 1;
-    }
-    if (UNDEFINED == D[N]) {
-        D[N] = 0;
-        for (int i = M-1 ; i>=0 ; i--) {
-            D[N] += top_down(C, D, N-C[i], M);
+    // Fill rest of the table enteries in bottom up manner  
+    for (int i = 1; i < N+1; i++) {
+        for (int j = 0; j < M; j++) {
+            // Count of solutions including S[j]
+            int x = (i-C[j] >= 0)? table[i - C[j]][j]: 0;
+            // Count of solutions excluding S[j]
+            int y = (j >= 1)? table[i][j-1]: 0;
+            // total count
+            table[i][j] = x + y;
         }
     }
-    return D[N];
-}
-
-int bottom_up(int * C, int N, int M)
-{
-
+    return table[N][M-1];
 }
 
