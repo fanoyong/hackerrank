@@ -31,7 +31,13 @@ int main() {
 
         for(int i=1;i<=N; i++) {
             for(int j=1; j<=N; j++) {
+                if (i==j) {
+                    continue;
+                }
                 for(int k=1; k<=N; k++) {
+                    if (i==k || j==k) {
+                        continue;
+                    }
                     LL local = data[i][k] + data[k][j];
                     if (local < data[i][j]) {
                         data[i][j] = local;
