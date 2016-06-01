@@ -19,41 +19,120 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-#include <unordered_map>
 
-#define LL long long
+#define ULL long long
+
+#define DEBUG 0
+
+/*
+12537864
+12537684 +
+12537648 +
+12536748 +
+12536478 +
+12534678 +
+12354678 +
+12345678 +
+
+*/
+
 
 using namespace std;
 
-void print(vector<LL> &arr);
+void swap(vector<ULL> &arr, ULL index);
+void print(vector<ULL> &arr);
 
 int main(){
     int T;
     cin >> T;
-    for(LL a0 = 0; a0 < T; a0++){
-        LL n;
+    for(int t=0; t < T; t++){
+        ULL n;
         cin >> n;
-        vector<LL> q(n+1);
-        vector<LL> qr(n+1);
-        vector<LL> r(n+1);
-        for(LL q_i=1; q_i<=n; q_i++){
-            cin >> q[q_i];
-            qr[q[q_i]] = q_i;
-            r[q_i] = 2;
+        vector<ULL> q(n+1);
+        vector<ULL> index(n+1);
+        vector<ULL> count(n+1);
+        for(ULL i=1; i<=n; i++){
+            cin >> q[i];
+            index[q[i]] = i;
+            count[i] = 2;
         }
+#if DEBUG
+        cout << endl << "data: " << endl;
         print(q);
-        print(qr);
-        print(r);
-        for (LL i=1; i<= n; i++) {
-            qr[i];
-        }    
+        cout << "index: " << endl;;
+        print(index);
+#endif
+        int flag = 0;
+        for (ULL i=1; i<=n; i++) {
+#if DEBUG
+            cout << "i: " << i << endl;
+            cout << "index[i]: " << index[i] << endl;
+#endif
+            if ((i - index[i]) > 2) {
+#if DEBUG
+                cout << "cannot reach" << endl;
+#endif
+                flag = 1;
+                break;
+            }
+        }
+        if (flag) {
+            cout << "Too chaotic" << endl;
+            continue;
+        }
+        ULL swap_count = 0;
+        flag = 0;
+        for (ULL i=n; i>1; i--) {
+            ULL cur = index[i];
+#if DEBUG
+            cout << "i: " << i << " cur: " << cur << endl;
+            print(q);
+            print(index);
+#endif
+            if (index[i] == i) {
+                continue;
+            }
+            do {
+                if (count[i] <= 0) {
+                    flag = 1;
+                    break;
+                }
+                count[i]--;
+
+                ULL t = q[index[i]+1];
+#if DEBUG
+                cout << "t:" << t << endl;
+#endif
+                q[index[i]+1] = q[index[i]];
+                q[index[i]] = t;
+
+                index[t]--;
+                index[i]++;
+
+                cur = index[i];
+                swap_count++;
+#if DEBUG
+                cout << "SWAP_COUNT++" << endl;
+                print(q);
+                print(index);
+#endif
+            } while(cur < i);
+            if (flag) {
+                break;
+            }
+        }
+        if (flag) {
+            cout << "Too chaotic" << endl;
+            continue;
+        }
+        cout << swap_count << endl;
     }
     return 0;
 }
 
-void print(vector<LL> &arr)
+void print(vector<ULL> &arr)
 {
-    for (LL i=1; i<arr.size(); i++) {
+    for (ULL i=1; i<arr.size(); i++) {
         cout << arr[i];
     }
     cout << endl << endl;
