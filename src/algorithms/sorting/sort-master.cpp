@@ -88,13 +88,6 @@ int main() {
     double elapsed_secs5 = double(end5 - begin5) / CLOCKS_PER_SEC;
     cout << "Quicksort(randomize) took: " << elapsed_secs5 << endl;
 
-    print10(arr);
-    print10(arr_bubble);
-    print10(arr_insert);
-    print10(arr_lomuto);
-    print10(arr_hoare);
-    print10(arr_randomize);
-
     return 0;
 }
 
