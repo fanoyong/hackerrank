@@ -5,9 +5,10 @@
 #include <iostream>
 #include <algorithm>
 #define LL long long
-
+#define N 100000
 using namespace std;
 
+/*
 void bubble_sort(vector<int> &arr);
 void insertion_sort(vector<int> &arr);
 void quicksort_lomuto(vector<int> &arr, LL lo, LL hi);
@@ -17,19 +18,45 @@ LL partition_hoare(vector<int> &arr, LL lo, LL hi);
 void quicksort_randomize(vector<int> &arr, LL lo, LL hi);
 LL partition_randomize(vector<int> &arr, LL lo, LL hi);
 void print(vector<int> arr);
+void print10(vector<int> arr);
+*/
+
+void bubble_sort(int *arr);
+void insertion_sort(int *arr);
+void quicksort_lomuto(int *arr, LL lo, LL hi);
+LL partition_lomuto(int *arr, LL lo, LL hi);
+void quicksort_hoare(int *arr, LL lo, LL hi);
+LL partition_hoare(int *arr, LL lo, LL hi);
+void quicksort_randomize(int *arr, LL lo, LL hi);
+LL partition_randomize(int *arr, LL lo, LL hi);
+void print(int *arr);
+void print10(int *arr);
+
 
 int main() {
-    LL N = 5000;
-    vector<int> arr(N), arr_lomuto(N), arr_hoare(N), arr_randomize(N), arr_bubble(N), arr_insert(N);
+    // vector<int> arr(N), arr_lomuto(N), arr_hoare(N), arr_randomize(N), arr_bubble(N), arr_insert(N);
+    int arr[N], arr_lomuto[N], arr_hoare[N], arr_randomize[N], arr_bubble[N], arr_insert[N];
+    srand(time(0));
     for(LL i=0; i<N; i++) {
-        arr[N] = rand();
+        int R = rand();
+        //int R = N-i;
+        arr[i] = R;
+        arr[i] = R;
+        arr_lomuto[i] = R;
+        arr_hoare[i] = R;
+        arr_randomize[i] = R;
+        arr_bubble[i] = R;
+        arr_insert[i] = R;
     }
+    /*
     arr_lomuto = arr;
     arr_hoare = arr;
     arr_randomize = arr;
     arr_bubble = arr;
     arr_insert = arr;
+    */
     cout << "starting comparison:" << endl;
+
 
     clock_t begin4 = clock();
     bubble_sort(arr_bubble);
@@ -56,17 +83,25 @@ int main() {
     cout << "Quicksort(hoare) took: " << elapsed_secs3 << endl;
 
     clock_t begin5 = clock();
-    quicksort_randomize(arr_hoare, 0, N-1);
+    quicksort_randomize(arr_randomize, 0, N-1);
     clock_t end5 = clock();
     double elapsed_secs5 = double(end5 - begin5) / CLOCKS_PER_SEC;
     cout << "Quicksort(randomize) took: " << elapsed_secs5 << endl;
 
+    print10(arr);
+    print10(arr_bubble);
+    print10(arr_insert);
+    print10(arr_lomuto);
+    print10(arr_hoare);
+    print10(arr_randomize);
+
     return 0;
 }
 
-void bubble_sort(vector<int> &arr) {
-    for (LL i=0; i<arr.size()-1; i++) {
-        for (LL j=i; j<arr.size()-2-i; j++) {
+// void bubble_sort(vector<int> &arr) {
+void bubble_sort(int *arr) {
+    for (LL i=0; i<N-1; i++) {
+        for (LL j=i; j<N-2-i; j++) {
             if (arr[i] > arr[j]) {
                 LL t = arr[i];
                 arr[i] = arr[j];
@@ -76,9 +111,10 @@ void bubble_sort(vector<int> &arr) {
     }
 }
 
-void insertion_sort(vector<int> &arr) {
-    for (LL i=0; i<arr.size()-1; i++) {
-        for (LL j=i+1; j<arr.size()-1; j++) {
+//void insertion_sort(vector<int> &arr) {
+void insertion_sort(int *arr) {
+    for (LL i=0; i<N-1; i++) {
+        for (LL j=i+1; j<N-1; j++) {
             if (arr[i] > arr[j]) {
                 LL t = arr[i];
                 arr[i] = arr[j];
@@ -88,7 +124,8 @@ void insertion_sort(vector<int> &arr) {
     }
 }
 
-void quicksort_lomuto(vector<int> &arr, LL lo, LL hi) {
+//void quicksort_lomuto(vector<int> &arr, LL lo, LL hi) {
+void quicksort_lomuto(int *arr, LL lo, LL hi) {
     if (lo < hi) {
         LL p = partition_lomuto(arr, lo, hi);
         quicksort_lomuto(arr, lo, p-1);
@@ -96,24 +133,26 @@ void quicksort_lomuto(vector<int> &arr, LL lo, LL hi) {
     }
 }
 
-LL partition_lomuto(vector<int> &arr, LL lo, LL hi) {
-    int pivot = arr.at(hi);
+//LL partition_lomuto(vector<int> &arr, LL lo, LL hi) {
+LL partition_lomuto(int *arr, LL lo, LL hi) {
+    int pivot = arr[hi];
     LL i = lo;
     for(LL j = lo; j<= hi-1; j++) {
-        if(arr.at(j) <= pivot) {
-            int t = arr.at(j);
-            arr[j] = arr.at(i);
+        if(arr[j] < pivot) {
+            int t = arr[j];
+            arr[j] = arr[i];
             arr[i] = t;
             i++;
         }
     }
-    int t = arr.at(hi);
-    arr[hi] = arr.at(i);
+    int t = arr[hi];
+    arr[hi] = arr[i];
     arr[i] = t;
     return i;
 }
 
-void quicksort_hoare(vector<int> &arr, LL lo, LL hi) {
+//void quicksort_hoare(vector<int> &arr, LL lo, LL hi) {
+void quicksort_hoare(int *arr, LL lo, LL hi) {
     if (lo < hi) {
         LL p = partition_hoare(arr, lo, hi);
         quicksort_hoare(arr, lo, p);
@@ -121,25 +160,27 @@ void quicksort_hoare(vector<int> &arr, LL lo, LL hi) {
     }
 }
 
-LL partition_hoare(vector<int> &arr, LL lo, LL hi) {
-    int pivot = arr.at(lo);
+//LL partition_hoare(vector<int> &arr, LL lo, LL hi) {
+LL partition_hoare(int *arr, LL lo, LL hi) {
+    int pivot = arr[lo];
     LL i = lo-1;
     LL j = hi+1;
     while (1) {
         do {
             i++;
-        } while (arr.at(i) < pivot);
+        } while (arr[i] < pivot);
         do {
             j--;
-        } while (arr.at(j) > pivot);
+        } while (arr[j] > pivot);
         if (i >= j) return j;
-        int t = arr.at(i);
-        arr[i] = arr.at(j);
+        int t = arr[i];
+        arr[i] = arr[j];
         arr[j] = t;
     }
 }
 
-void quicksort_randomize(vector<int> &arr, LL lo, LL hi) {
+//void quicksort_randomize(vector<int> &arr, LL lo, LL hi) {
+void quicksort_randomize(int *arr, LL lo, LL hi) {
     if (lo < hi) {
         LL p = partition_randomize(arr, lo, hi);
         quicksort_randomize(arr, lo, p);
@@ -147,7 +188,8 @@ void quicksort_randomize(vector<int> &arr, LL lo, LL hi) {
     }
 }
 
-LL partition_randomize(vector<int> &arr, LL lo, LL hi) {
+//LL partition_randomize(vector<int> &arr, LL lo, LL hi) {
+LL partition_randomize(int *arr, LL lo, LL hi) {
     LL pivot_index = (rand() % (hi-lo)) + lo;
     int pivot = arr[pivot_index];
     LL i = lo-1;
@@ -167,10 +209,19 @@ LL partition_randomize(vector<int> &arr, LL lo, LL hi) {
     return 0;
 }
 
-void print(vector<int> arr) {
-    LL end = arr.size();
+//void print(vector<int> arr) {
+void print(int *arr) {
+    LL end = N;
     for (LL i=0; i<end; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
+}
+
+//void print10(vector<int> arr) {
+void print10(int *arr) {
+ for (LL i=0; i<10; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;   
 }
