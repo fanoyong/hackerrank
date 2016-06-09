@@ -6,7 +6,7 @@
 #include <algorithm>
 #define LL long long
 #define N 20000
-#define DEBUG 0
+#define DEBUG 1
 
 using namespace std;
 
@@ -23,12 +23,16 @@ void quicksort_hoare(int *arr, LL lo, LL hi);
 LL partition_hoare(int *arr, LL lo, LL hi);
 void quicksort_randomize(int *arr, LL lo, LL hi);
 LL partition_randomize(int *arr, LL lo, LL hi);
+void merge_sort(int *arr, int *arr2);
+void merge_sort_split(int *arr, LL, LL, int *arr2);
+void merge_sort_merge(int *arr, LL begin, LL middle, LL end, int *arr2);
+void merge_sort_copy(int *arr2, LL, LL, int *arr1);
 void print(int *arr);
 void print10(int *arr);
 
 
 int main() {
-    int data_random[N], data_reverse[N], data_nearly[N];
+    int data_random[N], data_reverse[N], data_nearly[N], data_sorted[N];
     srand(time(0));
     for(LL i=0; i<N; i++) {
         int RAND = rand();
@@ -36,6 +40,7 @@ int main() {
         data_random[i] = RAND;
         data_reverse[i] = REVERSE;
         data_nearly[i] = i;
+        data_sorted[i] = i;
     }
     int t = data_nearly[0];
     data_nearly[0] = data_nearly[N-1];
@@ -46,18 +51,22 @@ int main() {
     compare(data_reverse);
     cout << "starting comparison: nearly sorted data" << endl;
     compare(data_nearly);
-
+    cout << "starting comparison: fully sorted data" << endl;
+    compare(data_sorted);
     return 0;
 }
 
 void compare(int *data) {
-    int arr_lomuto[N], arr_hoare[N], arr_randomize[N], arr_bubble[N], arr_insert[N];
+    int arr_lomuto[N], arr_hoare[N], arr_randomize[N];
+    int arr_bubble[N], arr_insert[N], arr_merge1[N], arr_merge2[N];
     for(LL i=0; i<N; i++) {
         arr_lomuto[i] = data[i];
         arr_hoare[i] = data[i];
         arr_randomize[i] = data[i];
         arr_bubble[i] = data[i];
         arr_insert[i] = data[i];
+        arr_merge1[i] = data[i];
+        arr_merge2[i] = data[i];
     }
 
 #if DEBUG
@@ -66,6 +75,7 @@ void compare(int *data) {
     print10(arr_lomuto);
     print10(arr_hoare);
     print10(arr_randomize);
+    print10(arr_merge1);
 #endif
 
     clock_t begin1 = clock();
@@ -79,14 +89,6 @@ void compare(int *data) {
     clock_t end2 = clock();
     double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
     cout << "Insertion sort took: " << elapsed_secs2 << endl;
-
-#if DEBUG
-    print10(arr_bubble);
-    print10(arr_insert);
-    print10(arr_lomuto);
-    print10(arr_hoare);
-    print10(arr_randomize);
-#endif
 
     clock_t begin3 = clock();
     quicksort_lomuto(arr_lomuto, 0, N-1);
@@ -105,32 +107,39 @@ void compare(int *data) {
     clock_t end5 = clock();
     double elapsed_secs5 = double(end5 - begin5) / CLOCKS_PER_SEC;
     cout << "Quicksort(randomize) took: " << elapsed_secs5 << endl;
-    cout << endl;
-    
+
+    clock_t begin6 = clock();
+    merge_sort(arr_merge1, arr_merge2);
+    clock_t end6 = clock();
+    double elapsed_secs6 = double(end6 - begin6) / CLOCKS_PER_SEC;
+    cout << "Merge sort took: " << elapsed_secs6 << endl;
+
 #if DEBUG
     print10(arr_bubble);
     print10(arr_insert);
     print10(arr_lomuto);
     print10(arr_hoare);
     print10(arr_randomize);
+    print10(arr_merge1);
 #endif
+    cout << endl;
 }
 
 void bubble_sort(int *arr) {
-    for (LL i=0; i<N-1; i++) {
-        for (LL j=i; j<N-2-i; j++) {
-            if (arr[i] > arr[j]) {
-                LL t = arr[i];
-                arr[i] = arr[j];
-                arr[j] = t;
+    for (LL i=0; i<N; i++) {
+        for (LL j=0; j<N-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                LL t = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = t;
             }
         }
     }
 }
 
 void insertion_sort(int *arr) {
-    for (LL i=0; i<N-1; i++) {
-        for (LL j=i+1; j<N-1; j++) {
+    for (LL i=0; i<N; i++) {
+        for (LL j=i; j<N; j++) {
             if (arr[i] > arr[j]) {
                 LL t = arr[i];
                 arr[i] = arr[j];
@@ -217,6 +226,47 @@ LL partition_randomize(int *arr, LL lo, LL hi) {
         arr[j] = t;
     }
     return 0;
+}
+
+void merge_sort(int *arr, int *arr2) {
+    merge_sort_split(arr, 0, N, arr2);
+}
+
+void merge_sort_split(int *arr, LL begin, LL end, int *arr2) {
+    if (end - begin < 2) {
+        return;
+    }
+    LL middle = (begin + end) / 2;
+    merge_sort_split(arr, begin, middle, arr2);
+    merge_sort_split(arr, middle, end, arr2);
+    merge_sort_merge(arr, begin, middle, end, arr2);
+    merge_sort_copy(arr2, begin,  end, arr);
+}
+
+void merge_sort_merge(int *arr, LL begin, LL middle, LL end, int *arr2) {
+    LL i = begin;
+    LL j = middle;
+    for (LL k = begin; k < end; k++) {
+        if (i >= middle) {
+            while (k < end) {
+                arr2[k++] = arr[j++];
+            }
+        } else if (j >= end) {
+            while (k < end) {
+                arr2[k++] = arr[i++];
+            }
+        } else if (arr[i] < arr[j]) {
+            arr2[k] = arr[i++];
+        } else {
+            arr2[k] = arr[j++];
+        }
+    }
+}
+
+void merge_sort_copy(int *arr2, LL begin, LL end, int *arr) {
+    for (LL i = begin; i<end; i++) {
+        arr[i] = arr2[i];
+    }
 }
 
 void print(int *arr) {
