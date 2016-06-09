@@ -5,9 +5,9 @@
 #include <iostream>
 #include <algorithm>
 #define LL long long
-#define N 20000
-#define DEBUG 0
-
+#define N 10000
+#define DEBUG 1
+#define COUNTSORT 0
 using namespace std;
 
 void compare(int *data);
@@ -28,6 +28,7 @@ void merge_sort_split(int *arr, LL, LL, int *arr2);
 void merge_sort_merge(int *arr, LL begin, LL middle, LL end, int *arr2);
 void merge_sort_copy(int *arr2, LL, LL, int *arr1);
 void heap_sort(int *arr);
+void count_sort(int *arr);
 void build_max_heap(int *arr);
 void max_heapify(int * arr, int i, int heap_size);
 void print(int *arr);
@@ -40,10 +41,17 @@ int main() {
     for(LL i=0; i<N; i++) {
         int RAND = rand();
         int REVERSE = N-i;
+#if COUNTSORT
+        data_random[i] = RAND % 100;
+        data_reverse[i] = REVERSE % 100;
+        data_nearly[i] = i % 100;
+        data_sorted[i] = i % 100;
+#else
         data_random[i] = RAND;
         data_reverse[i] = REVERSE;
         data_nearly[i] = i;
         data_sorted[i] = i;
+#endif
     }
     int t = data_nearly[0];
     data_nearly[0] = data_nearly[N-1];
@@ -62,6 +70,9 @@ int main() {
 void compare(int *data) {
     int arr_lomuto[N], arr_hoare[N], arr_randomize[N], arr_heap[N];
     int arr_bubble[N], arr_insert[N], arr_merge1[N], arr_merge2[N];
+#if COUNTSORT
+    int arr_count[N];
+#endif    
     for(LL i=0; i<N; i++) {
         arr_bubble[i] = data[i];
         arr_insert[i] = data[i];
@@ -71,6 +82,9 @@ void compare(int *data) {
         arr_merge1[i] = data[i];
         arr_merge2[i] = data[i];
         arr_heap[i] = data[i];
+#if COUNTSORT
+        arr_count[i] = data[i];
+#endif
     }
 
 #if DEBUG
@@ -81,6 +95,9 @@ void compare(int *data) {
     print10(arr_randomize);
     print10(arr_merge1);
     print10(arr_heap);
+#if COUNTSORT
+    print10(arr_count);
+#endif
 #endif
 
     clock_t begin1 = clock();
@@ -125,6 +142,14 @@ void compare(int *data) {
     double elapsed_secs7 = double(end7 - begin7) / CLOCKS_PER_SEC;
     cout << "Heap sort took: " << elapsed_secs7 << endl;
 
+#if COUNTSORT
+    clock_t begin8 = clock();
+    count_sort(arr_count);
+    clock_t end8 = clock();
+    double elapsed_secs8 = double(end8 - begin8) / CLOCKS_PER_SEC;
+    cout << "Count sort took: " << elapsed_secs8 << endl;
+#endif
+
 #if DEBUG
     print10(arr_bubble);
     print10(arr_insert);
@@ -133,6 +158,9 @@ void compare(int *data) {
     print10(arr_randomize);
     print10(arr_merge1);
     print10(arr_heap);
+#if COUNTSORT
+    print10(arr_count);
+#endif
 #endif
     cout << endl;
 }
@@ -316,6 +344,22 @@ void max_heapify(int *arr, int i, int heap_size) {
         arr[i] = arr[largest];
         arr[largest] = t;
         max_heapify(arr, largest, heap_size);
+    }
+}
+
+void count_sort(int *arr) {
+    int count[101];
+    for (int i=0; i<=100; i++) {
+        count[i] = 0;
+    }
+    for (LL i=0; i<N; i++) {
+        count[arr[i]]++;
+    }
+    LL index =0;
+    for (int i=0; i<=100; i++) {
+        for (int j=0; j<count[i]; j++) {
+            arr[index++] = i;
+        }
     }
 }
 
