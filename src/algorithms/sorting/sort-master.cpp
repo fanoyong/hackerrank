@@ -6,7 +6,7 @@
 #include <algorithm>
 #define LL long long
 #define N 20000
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 
@@ -27,6 +27,9 @@ void merge_sort(int *arr, int *arr2);
 void merge_sort_split(int *arr, LL, LL, int *arr2);
 void merge_sort_merge(int *arr, LL begin, LL middle, LL end, int *arr2);
 void merge_sort_copy(int *arr2, LL, LL, int *arr1);
+void heap_sort(int *arr);
+void build_max_heap(int *arr);
+void max_heapify(int * arr, int i, int heap_size);
 void print(int *arr);
 void print10(int *arr);
 
@@ -57,16 +60,17 @@ int main() {
 }
 
 void compare(int *data) {
-    int arr_lomuto[N], arr_hoare[N], arr_randomize[N];
+    int arr_lomuto[N], arr_hoare[N], arr_randomize[N], arr_heap[N];
     int arr_bubble[N], arr_insert[N], arr_merge1[N], arr_merge2[N];
     for(LL i=0; i<N; i++) {
+        arr_bubble[i] = data[i];
+        arr_insert[i] = data[i];
         arr_lomuto[i] = data[i];
         arr_hoare[i] = data[i];
         arr_randomize[i] = data[i];
-        arr_bubble[i] = data[i];
-        arr_insert[i] = data[i];
         arr_merge1[i] = data[i];
         arr_merge2[i] = data[i];
+        arr_heap[i] = data[i];
     }
 
 #if DEBUG
@@ -76,6 +80,7 @@ void compare(int *data) {
     print10(arr_hoare);
     print10(arr_randomize);
     print10(arr_merge1);
+    print10(arr_heap);
 #endif
 
     clock_t begin1 = clock();
@@ -114,6 +119,12 @@ void compare(int *data) {
     double elapsed_secs6 = double(end6 - begin6) / CLOCKS_PER_SEC;
     cout << "Merge sort took: " << elapsed_secs6 << endl;
 
+    clock_t begin7 = clock();
+    heap_sort(arr_heap);
+    clock_t end7 = clock();
+    double elapsed_secs7 = double(end7 - begin7) / CLOCKS_PER_SEC;
+    cout << "Heap sort took: " << elapsed_secs7 << endl;
+
 #if DEBUG
     print10(arr_bubble);
     print10(arr_insert);
@@ -121,6 +132,7 @@ void compare(int *data) {
     print10(arr_hoare);
     print10(arr_randomize);
     print10(arr_merge1);
+    print10(arr_heap);
 #endif
     cout << endl;
 }
@@ -266,6 +278,44 @@ void merge_sort_merge(int *arr, LL begin, LL middle, LL end, int *arr2) {
 void merge_sort_copy(int *arr2, LL begin, LL end, int *arr) {
     for (LL i = begin; i<end; i++) {
         arr[i] = arr2[i];
+    }
+}
+
+void heap_sort(int *arr) {
+    LL heap_size = N;
+    build_max_heap(arr);
+    for (LL i = N-1; i>=1; i--) {
+        int t = arr[i];
+        arr[i] = arr[0];
+        arr[0]  = t;
+        heap_size--;
+        max_heapify(arr, 0, heap_size);
+    }
+}
+
+void build_max_heap(int *arr) {
+    for (LL i = N/2; i>=0; i--) {
+        max_heapify(arr, i, N);
+    }
+}
+
+void max_heapify(int *arr, int i, int heap_size) {
+    LL left = 2*(i+1) - 1;
+    LL right = 2*(i+1);
+    int largest;
+    if (left < heap_size && arr[left] > arr[i]) {
+        largest = left;
+    } else {
+        largest = i;
+    }
+    if (right < heap_size && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    if (largest != i) {
+        int t = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = t;
+        max_heapify(arr, largest, heap_size);
     }
 }
 
