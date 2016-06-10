@@ -5,8 +5,8 @@
 #include <iostream>
 #include <algorithm>
 #define LL long long
-#define N 10000
-#define DEBUG 1
+#define N 30000
+#define DEBUG 0
 #define COUNTSORT 0
 using namespace std;
 
