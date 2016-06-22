@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
 import numpy as np
-from sklearn import cross_validation
-from sklearn import datasets, linear_model
-from sklearn.cross_validation import KFold
 
 s = raw_input()
 ss = s.split(' ')
@@ -16,8 +16,8 @@ for i in range(n):
 
 train_x = data[:, :f]
 train_y = data[:, f:]
-regr = linear_model.LinearRegression()
-regr.fit(train_x, train_y)
+model = Pipeline([('poly', PolynomialFeatures(degree=3)), ('linear', LinearRegression(fit_intercept=False))])
+model = model.fit(train_x, train_y)
 
 s = raw_input()
 n = int(s)
@@ -26,6 +26,6 @@ for i in range(n):
     t = raw_input()
     testdata[i] = map(float, t.split(' '))
 
-testresult = regr.predict(testdata)
+testresult = model.predict(testdata)
 for x in np.nditer(testresult):
-    print x
+    print np.round(x,2)
