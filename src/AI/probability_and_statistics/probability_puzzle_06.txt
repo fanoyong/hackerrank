@@ -1,0 +1,20 @@
+Objective 
+In this challenge, we practice calculating probability.
+
+Task 
+Bag X contains 5 white balls and 4 black balls. Bag Y contains 7 white balls and 6 black balls. You draw 1 ball from bag X and, without observing its color, put it into bag Y. Now, if a ball is drawn from bag , find the probability that it is black.
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction , where  and are both integers.
+
+Your answer should resemble something like:
+
+
+WB
+5/9 * 6/14= 30/126
+
+BB
+4/9 * 7/14 = 28/126
+
+58/126 = 29/63

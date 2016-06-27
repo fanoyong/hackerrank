@@ -1,0 +1,15 @@
+Objective 
+In this challenge, we practice calculating probability.
+
+Task 
+For a single toss of  fair (evenly-weighted) dice, find the probability that the values rolled by each die will be different and their sum is .
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction , where  and are both integers.
+
+Your answer should resemble something like:
+
+1-5 / 2-4 / 4-2 / 5-1
+
+4/36 = 1/9

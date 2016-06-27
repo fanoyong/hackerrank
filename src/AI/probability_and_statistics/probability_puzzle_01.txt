@@ -1,0 +1,15 @@
+Objective 
+In this challenge, we practice calculating probability.
+
+Task 
+In a single toss of  fair (evenly-weighted) -sided dice, find the probability of that their sum will be at most .
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction , where  and are both integers.
+
+Your answer should resemble something like:
+
+4-6 / 5-5 / 5-6 / 6-4 / 6-5 / 6-6
+
+1 - 6/36 = 5/6
