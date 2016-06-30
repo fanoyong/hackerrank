@@ -5,6 +5,6 @@ Fill in the answer in the text box, in the form of an irreducible fraction A/B w
 e.g. Your answer should resemble something like:
 
 
-1-(1/12 * 1/15 * 1/10) = 
+1-(11/12 * 14/15 * 9/10) = 1 - 1386/1800 = 414/1800 = 207/900 = 69/300 = 23/100
 
-1799/1800
+

@@ -1,0 +1,35 @@
+Objective 
+In this challenge, we practice calculating standard deviation.
+
+Task 
+Find the largest possible value of  where the standard deviation of the values in the set {1,2,3,N} is equal to the standard deviation of the values in the set {1,2,3}.
+
+Output the value of , correct to two decimal places.
+
+Output Format
+
+Your output must be a floating point/decimal number, correct to a scale of  decimal places. You can submit solutions in either of the  following ways:
+
+Solve the problem manually and submit your result as Plain Text.
+
+Submit an R or Python program, which uses the above parameters (hard-coded), and computes the answer.
+
+Your answer format should resemble something like:
+
+
+M1 = 1+2+3 / 3 = 2
+STD1 = sqrt(((1-2)^2 + (2-2)^2 + (3-2)^2)/3) = sqrt(2/3)
+
+M2 = 1+2+3+N/4 = (N+6)/4
+STD2 = sqrt((N+6/4 - 1)^2 + (N+6/4 - 2)^2 + (N+6/4-3)^2 + (N+6/4-N)^2) = sqrt(((N+2)^2 + (N-2)^2 + (N-6)^2 + (3N-6)^2)/64)
+ => N^2 + 4N + 4 + N^2 - 4N + 4 + N^2 -12N + 36 + 9N^2 - 18N + 36 = 128/3
+ => 12N^2 - 30N + 80 = 128/3
+ => 36N^2 - 90N + 112 = 0;
+
+
+ => ax^2 + bx + c = 0
+ x^2 + b/a x + c/a = 0
+ (x + b/2a)^2 - b^2 - 4ac/ 4a^2 = 0;
+ x =  +- b/2a + sqrt(4ac) / 2a  = (+- b + sqrt(4ac)) / 2a
+ 
+    N = (+- 90 + sqrt (4 * 36 * 112)  ) / 72 =  3.013834207 = 3.01
