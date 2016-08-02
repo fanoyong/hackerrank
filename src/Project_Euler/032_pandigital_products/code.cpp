@@ -5,78 +5,101 @@
 #include <algorithm>
 #include <cstring>
 #define LL long long
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 
-LL is_pandigital(LL M1, LL M2, LL N, LL P);
+int is_pandigital(LL M1, LL M2, LL P);
+int N;
 
 int main() {
-    LL input;
-    cin >> input;
-    LL l = pow(10,input);
-#if DEBUG
-    //cout << "limit: " << l << endl;
-#endif
-    LL P;
+    cin >> N;
+    LL M1, M2, P;
     LL count = 0;
-    for (LL i=1; i<l; i++) {
-        LL digit_i = (LL) log10(i) + 1;
-        if (digit_i >= input) {
+    LL i, j;
+    int DM1, DM2, DP;
+    for(i=1;;i++) {
+        M1 = i;
+        DM1 = log10(i) + 1;
+        #if DEBUG
+            cout << "M1: " << M1 << endl;
+            cout << "M1 digit: " << DM1 << endl;
+        #endif
+        if (DM1 >= N-2) {
             break;
         }
-        for (LL j=1; j<=l; j++) {
-            LL digit_j = (LL) log10(j) + 1;
-            if (digit_i + digit_j > input) {
+        for(j=i+1;;j++) {
+            M2 = j;
+            DM2 = log10(j) + 1;
+            #if DEBUG
+                cout << "M2: " << M2 << endl;
+                cout << "M2 digit: " << DM2 << endl;
+            #endif
+            if (DM1 + DM2 >= N-1) {
                 break;
             }
-#if DEBUG
-            // cout << "i / digit_i: " << i << " / " << digit_i << endl;
-            // cout << "j / digit_j: " << j << " / " << digit_j << endl;
-#endif
-            P = i*j;
-            LL digit_p = (LL) log10(P) + 1;
-            if (digit_p  + digit_i + digit_j + 1 != input) {
+            P = M1 * M2;
+            DP = log10(P) + 1;
+            #if DEBUG
+                cout << "P: " << P << endl;
+                cout << "P digit: " << DP << endl;
+            #endif
+            if (DM1 + DM2 + DP != N) {
                 continue;
             }
-            if (is_pandigital(i, j, input, P)) {
+            if (is_pandigital(M1, M2, P)) {
                 count += P;
             }
         }
     }
     cout << count << endl;
-    return 0;
 }
 
-LL is_pandigital(LL M1, LL M2, LL N, LL P) {
-    int count[10] = {0,0,0,0,0,0,0,0,0,0};
-    LL digit = (LL) log10(M1) + 1;
-    for(LL i = 0; i < digit; i++) {
-        int n = M1 % 10;
-        count[n]++;
+int is_pandigital(LL M1, LL M2, LL P) {
+    int *digit = (int *)calloc(10, sizeof(int));
+    #if DEBUG
+        cout << "M1: " << M1 << " M2: " << M2 << " P: " << P << endl;
+    #endif
+    while (M1 > 0) {
+        int cur = M1%10;
+        if (cur > N || cur == 0) {
+            return 0;
+        }
+        digit[cur]++;
+        if (digit[cur] > 1) {
+            return 0;
+        }
         M1 /= 10;
     }
-    digit = (LL) log10(M2) + 1;
-    for(LL i = 0; i < digit; i++) {
-        int n = M2 % 10;
-        count[n]++;
+
+    while (M2 > 0) {
+        int cur = M2%10;
+        if (cur > N || cur == 0) {
+            return 0;
+        }
+        digit[cur]++;
+        if (digit[cur] > 1) {
+            return 0;
+        }
         M2 /= 10;
     }
-    digit = (LL) log10(N) + 1;
-    LL N2 = N;
-    for(LL i = 0; i < digit; i++) {
-        int n = N % 10;
-        count[n]++;
-        N /= 10;
+
+    while (P > 0) {
+        int cur = P%10;
+        if (cur > N || cur == 0) {
+            return 0;
+        }
+        digit[cur]++;
+        if (digit[cur] > 1) {
+            return 0;
+        }
+        P /= 10;
     }
-    for (int i = 0; i<N2; i++) {
-        if (count[i] != 1) {
+
+    for (int i=1; i<N; i++) {
+        if (digit[i] != 1) {
             return 0;
         }
     }
-#if DEBUG
-    cout << "i: " << M1 << " j: " << M2 << " P: " << P << endl;
-#endif
     return 1;
 }
-
