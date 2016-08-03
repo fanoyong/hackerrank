@@ -18,6 +18,7 @@ int main() {
     LL count = 0;
     LL i, j;
     int DM1, DM2, DP;
+    int * flag = (int *) calloc (10000, sizeof(int));
     for(i=1;;i++) {
         M1 = i;
         DM1 = log10(i) + 1;
@@ -48,10 +49,14 @@ int main() {
                 continue;
             }
             if (is_pandigital(M1, M2, P)) {
-                count += P;
+                if (!flag[P]) {
+                    flag[P] = 1;
+                    count += P;
+                }
             }
         }
     }
+    free(flag);
     cout << count << endl;
 }
 
