@@ -1,10 +1,10 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Solution {
     private static final int MAX_P = 5000000;
+    private static boolean[] PRIME = new boolean[MAX_P + 1];
     private static int[] SIEVE = new int[MAX_P + 1];
     private static int[] SIEVEI = new int[MAX_P + 1];
     private static HashMap<Integer, Triple> TRIPLESET = new HashMap<Integer, Triple>();
@@ -46,6 +46,12 @@ public class Solution {
 
     private static void generateTriplets() {
 
+        for (int i = 0; i <= MAX_P; i++) {
+            SIEVE[i] = 0;
+            SIEVEI[i] = 0;
+            PRIME[i] = false;
+        }
+
         for (int m = 3; m < 2300; m += 2) {
             int msq = m * m;
             for (int n = 1; n <= m; n += 2) {
@@ -61,14 +67,18 @@ public class Solution {
                     continue;
                 }
                 Triple triple = new Triple(a, b, c);
-                TRIPLESET.put(p, triple);
+                if (!PRIME[p]) {
+                    for (int i = p; i <= MAX_P; i += p) {
+                        PRIME[i] = true;
+                        SIEVE[i]++;
+                    }
+                    TRIPLESET.put(p, triple);
+                }
             }
         }
 
         for (int p : TRIPLESET.keySet()) {
-            for (long i = p; i <= MAX_P; i += p) {
-                SIEVE[(int) i]++;
-            }
+
         }
         int cur = 0;
         int curi = 0;
