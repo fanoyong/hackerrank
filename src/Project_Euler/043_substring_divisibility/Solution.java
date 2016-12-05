@@ -1,56 +1,46 @@
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Solution {
 
-    private static final ArrayList<Long> ANSWERS = new ArrayList<Long>();
     private static final boolean DEBUG = false;
 
-    public static void main(String[] args) {
-        generateData();
-        Collections.sort(ANSWERS);
-        if (ANSWERS.isEmpty()) {
-            return;
-        }
-        Scanner scanner = new Scanner(System.in);
-        int t = scanner.nextInt();
-        while (t-- > 0) {
-            long n = scanner.nextLong();
-            if (ANSWERS.get(0) > n) {
-                System.out.println(-1);
-            } else {
-                int i = 0;
-                for (; i < ANSWERS.size(); i++) {
-                    if (ANSWERS.get(i) > n) {
-                        break;
-                    }
-                }
-                i--;
-                System.out.println(ANSWERS.get(i));
-            }
-        }
-        scanner.close();
+    private static final String ORIGINAL = "0123456789";
 
+    private static final int[] PRIMES = new int[7];
+    static {
+        PRIMES[0] = 2;
+        PRIMES[1] = 3;
+        PRIMES[2] = 5;
+        PRIMES[3] = 7;
+        PRIMES[4] = 11;
+        PRIMES[5] = 13;
+        PRIMES[6] = 17;
     }
 
-    private static void generateData() {
-        final String SOURCE = "123456789";
-        for (int start = 2; start <= 9; start++) {
-            char[] subchar = SOURCE.substring(0, start).toCharArray();
-            // 5 3 4 2 1
-            // 5 4 1 2 3
-            // 5 4 1 3 2
-            long newnum = Integer.valueOf(String.valueOf(subchar));
-            if (isPrime(newnum) && isPandigital(newnum)) {
-                if (DEBUG) {
-                    System.out.println("ADDED:" + newnum);
-                }
-                ANSWERS.add(newnum);
+    private static final long[] ANSWER = new long[10];
+
+    public static void main(String[] args) {
+        generateAnswers();
+        Scanner scanner = new Scanner(System.in);
+        int x = scanner.nextInt();
+        System.out.println(ANSWER[x]);
+        scanner.close();
+    }
+
+    private static void generateAnswers() {
+        for (int i = 0; i <= 2; i++) {
+            ANSWER[i] = 0;
+        }
+        for (int i = 3; i <= 9; i++) {
+            ANSWER[i] = 0;
+            char[] subchar = ORIGINAL.substring(0, i + 1).toCharArray();
+            String x = String.valueOf(subchar);
+            if (isDivisible(x, i)) {
+                ANSWER[i] += Long.valueOf(x);
             }
             do {
-                int k = start - 2;
+                int k = i - 1;
                 for (; k >= 0; k--) {
                     if (subchar[k] < subchar[k + 1]) {
                         break;
@@ -60,7 +50,7 @@ public class Solution {
                     // End of permutation
                     break;
                 }
-                int l = start - 1;
+                int l = i;
                 for (; l > k; l--) {
                     if (subchar[l] > subchar[k]) {
                         break;
@@ -70,7 +60,7 @@ public class Solution {
                 subchar[k] = subchar[l];
                 subchar[l] = t;
                 int i1 = k + 1;
-                int i2 = start - 1;
+                int i2 = i;
                 while (i1 < i2) {
                     t = subchar[i1];
                     subchar[i1] = subchar[i2];
@@ -78,60 +68,24 @@ public class Solution {
                     i1++;
                     i2--;
                 }
-                newnum = Integer.valueOf(String.valueOf(subchar));
-                if (isPrime(newnum) && isPandigital(newnum)) {
-                    if (DEBUG) {
-                        System.out.println("ADDED:" + newnum);
-                    }
-                    ANSWERS.add(newnum);
+                x = String.valueOf(subchar);
+                if (isDivisible(x, i)) {
+                    ANSWER[i] += Long.valueOf(x);
                 }
             } while (true);
         }
     }
 
-    private static boolean isPrime(long n) {
-        if (n < 2) {
-            return false;
-        } else if (n == 2 || n == 3) {
-            return true;
-        } else if ((n & 1) != 1) {
-            return false;
-        }
-        for (int i = 3; i <= Math.sqrt(n); i += 2) {
-            if (n % i == 0) {
+    private static boolean isDivisible(String s, int n) {
+        for (int i = 3; i <= n; i++) {
+            int prime = PRIMES[i - 3];
+            int subInt = Integer.valueOf(s.substring(i - 2, i + 1));
+            if (subInt % prime != 0) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean isPandigital(long n) {
-        boolean[] mark = new boolean[10];
-        for (int i = 0; i < 10; i++) {
-            mark[i] = false;
-        }
-        while (n > 0) {
-            int digit = (int) (n % 10);
-            if (mark[digit]) {
-                return false;
-            } else {
-                mark[digit] = true;
-            }
-            n /= 10;
-        }
-        int indexhigh = 1;
-        for (int i = 9; i >= 1; i--) {
-            if (mark[i]) {
-                indexhigh = i;
-                break;
-            }
-        }
-        for (int i = 1; i <= indexhigh; i++) {
-            if (!mark[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
 
