@@ -1,17 +1,14 @@
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public class Solution {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static final Long MAX = 200000000000000L;
-    private static final HashSet<Long> TRIPENTA = new HashSet<Long>();
-    private static final HashSet<Long> PENTAHEXA = new HashSet<Long>();
-    private static final ArrayList<Long> ANSWER = new ArrayList<Long>();
+    private static final TreeSet<Long> TRIPENTA = new TreeSet<Long>();
+    private static final TreeSet<Long> PENTAHEXA = new TreeSet<Long>();
 
     public static void main(String[] args) {
         generateAnswers();
@@ -27,26 +24,32 @@ public class Solution {
             }
         }
         long N = scanner.nextLong();
-        int a = scanner.nextInt();
-        int b = scanner.nextInt();
+        long a = scanner.nextLong();
+        long b = scanner.nextLong();
         if (a == 3 && b == 5) {
-            ANSWER.addAll(TRIPENTA);
-            Collections.sort(ANSWER);
-            for (Long l : ANSWER) {
-                if (l > N) {
+            for (Long l : TRIPENTA) {
+                if (l >= N) {
+                    break;
+                }
+                System.out.println(l);
+            }
+        } else if (a == 5 && b == 6) {
+            for (Long l : PENTAHEXA) {
+                if (l >= N) {
                     break;
                 }
                 System.out.println(l);
             }
         } else {
-            ANSWER.addAll(PENTAHEXA);
-            Collections.sort(ANSWER);
-            for (Long l : ANSWER) {
-                if (l > N) {
+            long n = 1;
+            do {
+                long x = n * (2 * n - 1);
+                if (x >= N) {
                     break;
                 }
-                System.out.println(l);
-            }
+                System.out.println(x);
+                n++;
+            } while (true);
         }
         scanner.close();
     }
