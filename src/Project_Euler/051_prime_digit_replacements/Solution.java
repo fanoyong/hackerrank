@@ -23,34 +23,55 @@ public class Solution {
         // n == 3 -> start: 1000, end:9999,
         int start = (int) Math.pow(10, n - 1);
         int end = (int) (Math.pow(10, n) - 1);
-        // k == 2 -> interval = 100 -> 1000 - 1099
-        int interval = (int) Math.pow(10, k);
-        if (DEBUG) {
-            System.out.println("start:" + start + " end:" + end + " interval:" + interval);
+        int gapBasis = 0;
+        for (int i = 0; i < k; i++) {
+            gapBasis += (int) Math.pow(10, i);
         }
-        int numOfInterval = (end - start) / interval;
-        boolean found = false;
-        for (int i = 0; i < numOfInterval; i++) {
-            int count = 0;
-            for (int j = start + i * interval; j < start + (i + 1) * interval; j++) {
-                if (SIEVE[j]) {
-                    count++;
-                }
-                if (count > l+1) {
-                    break;
-                }
+        int firstPrime = start;
+        while (firstPrime < end) {
+            while (!SIEVE[firstPrime]) {
+                firstPrime++;
             }
-            if (count == l) {
-                for (int j = start + i * interval; j < start + (i + 1) * interval; j++) {
-                    if (SIEVE[j]) {
-                        ANSWER.add(j);
+            int gap = gapBasis;
+            int gapEnd = (int) Math.pow(10, k);
+            int gapStart = (firstPrime / gapEnd) * gapEnd;
+            int index = firstPrime;
+            boolean flag = false;
+            while (gapStart + gap < end) {
+                gapStart = (firstPrime / gapEnd) * gapEnd;
+                int count = 0;
+                boolean found = false;
+                for (int i = firstPrime; i < gapStart + gapEnd - 1; i += gap) {
+                    if (SIEVE[i]) {
+                        count++;
+                    }
+                    if (count == l) {
+                        found = true;
+                        break;
                     }
                 }
-                found = true;
+                if (found) {
+                    count = 0;
+                    flag = true;
+                    for (int i = firstPrime; i < gapStart + gapEnd - 1; i += gap) {
+                        if (SIEVE[i]) {
+                            ANSWER.add(i);
+                            count++;
+                        }
+                        if (count == l) {
+                            break;
+                        }
+                    }
+                    break;
+                }
+
+                gap *= 10;
+                gapEnd *= 10;
             }
-            if (found) {
+            if (flag) {
                 break;
             }
+            firstPrime++;
         }
         for (int p : ANSWER) {
             System.out.print(p + " ");
