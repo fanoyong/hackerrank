@@ -1,4 +1,5 @@
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -68,38 +69,41 @@ public class Solution {
     }
 
     private static boolean isPrime(long n, int k) {
-        if (n <= 1) {
+        if (n <= 1 || n == 4) {
             return false;
-        } else if (n <= 3) {
+        }
+        if (n <= 3) {
             return true;
-        } else if ((n & 1) != 1) {
-            return false;
         }
         long d = n - 1;
         while (d % 2 == 0) {
             d /= 2;
         }
-        while (k-- > 0) {
-            if (!millerTest(n, d)) {
+        for (int i = 0; i < k; i++) {
+            if (miillerTest(d, n) == false) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean millerTest(long n, long d) {
-        long a = (long) Math.random() * (n - 4) + 2;
-        long x = (long) (Math.pow(a, d) % n);
-        if (x == 1 || x == (n - 1)) {
+    private static boolean miillerTest(long dl, long n) {
+        long al = (long) (2 + (Math.random() % (n - 4)));
+        BigInteger a = BigInteger.valueOf(al);
+        BigInteger nMinusOne = BigInteger.valueOf(n - 1);
+        BigInteger x = a.modPow(BigInteger.valueOf(dl), BigInteger.valueOf(n));
+        if (x.equals(BigInteger.ONE) || x.equals(nMinusOne)) {
             return true;
         }
-        while (d != n - 1) {
-            x = (x * x) % n;
-            d *= 2;
-            if (x == 1) {
+        BigInteger d = BigInteger.valueOf(dl);
+        while (!d.equals(nMinusOne)) {
+            x = x.multiply(x);
+            x = x.mod(BigInteger.valueOf(n));
+            d = d.multiply(BigInteger.valueOf(2l));
+            if (x.equals(BigInteger.ONE)) {
                 return false;
             }
-            if (x == n - 1) {
+            if (x.equals(nMinusOne)) {
                 return true;
             }
         }
