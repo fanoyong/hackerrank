@@ -1,34 +1,36 @@
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Solution {
 
     public static void main(String[] args) {
-        int[] count = new int[100001];
-        for (int i = 1; i <= 100000; i++) {
+        HashMap<BigInteger, Integer> answer = new HashMap<BigInteger, Integer>();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        scanner.close();
+        for (int i = 1; i <= n; i++) {
             BigInteger cur = BigInteger.valueOf(i);
             for (int j = 0; j < 60; j++) {
                 if (isPanlindrome(cur)) {
-                    if (cur.equals(BigInteger.valueOf(121))) {
-                        System.out.println(i);
-                    }
-                    if (cur.compareTo(BigInteger.valueOf(100000)) <= 0) {
-                        count[cur.intValue()]++;
+                    if (answer.containsKey(cur)) {
+                        int count = answer.get(cur);
+                        answer.put(cur, count + 1);
+                    } else {
+                        answer.put(cur, 1);
                     }
                     break;
                 }
                 cur = cur.add(getReverse(cur));
             }
         }
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        scanner.close();
         int max = Integer.MIN_VALUE;
-        int maxi = 0;
-        for (int i = 1; i <= n; i++) {
-            if (count[i] > max) {
-                max = count[i];
-                maxi = i;
+        BigInteger maxi = BigInteger.ZERO;
+        for (BigInteger bi : answer.keySet()) {
+            int ans = answer.get(bi);
+            if (ans > max) {
+                max = ans;
+                maxi = bi;
             }
         }
         System.out.println(maxi + " " + max);
