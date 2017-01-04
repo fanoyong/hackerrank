@@ -20,7 +20,7 @@ public class Solution {
                 if (!FIRST[c - 'a']) {
                     continue;
                 }
-                if (isValid(c, i1)) {
+                if (!isValid(c, i1)) {
                     FIRST[c - 'a'] = false;
                 }
             }
@@ -29,7 +29,7 @@ public class Solution {
                 if (!SECOND[c - 'a']) {
                     continue;
                 }
-                if (isValid(c, i2)) {
+                if (!isValid(c, i2)) {
                     SECOND[c - 'a'] = false;
                 }
             }
@@ -38,15 +38,12 @@ public class Solution {
                 if (!THIRD[c - 'a']) {
                     continue;
                 }
-                if (isValid(c, i3)) {
+                if (!isValid(c, i3)) {
                     THIRD[c - 'a'] = false;
                 }
             }
         }
         scanner.close();
-        for (int i = 0; i < FIRST.length; i++) {
-            System.out.println(FIRST[i]);
-        }
         StringBuilder sb = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
             if (FIRST[c - 'a']) {
@@ -70,9 +67,10 @@ public class Solution {
         int xor = (c ^ i);
         if ((xor >= 'a' && xor <= 'z') || (xor >= 'A' && xor <= 'Z') || (xor >= '0' && xor <= '9')
                 || (xor == '(' || xor == ')') || (xor == ';' || xor == ':') || (xor == ',' || xor == '.')
-                || (xor == '\'' || xor == '?') || (xor == '-' || xor == '!')) {
+                || (xor == '\'' || xor == '?') || (xor == '-' || xor == '!' || xor == ' ')) {
             return true;
         }
         return false;
     }
 }
+
